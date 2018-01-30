@@ -1,11 +1,22 @@
 package project.meitu.com.gldemo.util;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
+import static android.opengl.GLES20.GL_LINEAR;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_TEXTURE_MAG_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
 import static android.opengl.GLES20.glAttachShader;
+import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glCreateProgram;
+import static android.opengl.GLES20.glGenTextures;
 import static android.opengl.GLES20.glLinkProgram;
+import static android.opengl.GLES20.glTexParameteri;
 
 public class MTGLHelper {
     /**
@@ -43,6 +54,22 @@ public class MTGLHelper {
         glLinkProgram(programId);
         //返回程序
         return programId;
+    }
+
+    public static int loadTexture(Context context, int resourcesId) {
+        int[] textureId = new int[1];
+        //生成纹理
+        glGenTextures(1, textureId, 0);
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourcesId);
+        //绑定纹理对象
+        glBindTexture(GL_TEXTURE_2D, textureId[0]);
+        //纹理过滤
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        //加载图片->纹理
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+        bitmap.recycle();
+        return textureId[0];
     }
 
 }

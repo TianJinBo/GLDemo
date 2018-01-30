@@ -11,7 +11,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mSurfaceView = findViewById(R.id.gl_surface_view);
-        mSurfaceView.setRenderer(new RectangleRenderer());
+        mSurfaceView.setRenderer(new PicRenderer(this));
     }
 
     @Override
